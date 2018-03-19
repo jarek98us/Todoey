@@ -36,6 +36,16 @@ class ToDoListViewController: UITableViewController {
         
         return cell
     }
+    
+    // MARK - TableView Delegate Methods
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected row: \(indexPath.row), item: \(itemArray[indexPath.row])")
+        
+        let isChecked = tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark
+        tableView.cellForRow(at: indexPath)?.accessoryType = isChecked ? .none : .checkmark
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
 }
 
