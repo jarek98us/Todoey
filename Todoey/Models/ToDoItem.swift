@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ToDoItem {
+class ToDoItem: Encodable, Decodable {
     var title: String = ""
     var done: Bool = false
     

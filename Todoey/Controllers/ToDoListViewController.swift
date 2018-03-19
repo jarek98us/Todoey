@@ -12,16 +12,12 @@ class ToDoListViewController: UITableViewController {
 
     var itemArray = [ToDoItem]()
     let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let storedArray = defaults.array(forKey: "ToDoListArray2") as? [ToDoItem] {
-            print(storedArray)
-            itemArray = storedArray
-        }
-        //
-        // Do any additional setup after loading the view, typically from a nib.
+        loadItems()
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,10 +50,35 @@ class ToDoListViewController: UITableViewController {
         tableView.cellForRow(at: indexPath)?.accessoryType = item.done ? .checkmark : .none
         
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        saveItems()
     }
 
     
     // MARK - Add new Items
+    fileprivate func saveItems() {
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(self.itemArray)
+            try data.write(to: self.dataFilePath!)
+        } catch {
+            print("Error encoding array, \(error)")
+        }
+        
+        self.tableView.reloadData()
+    }
+    
+    fileprivate func loadItems() {
+        do {
+            let data = try Data(contentsOf: self.dataFilePath!)
+            let decoder = PropertyListDecoder()
+            
+            itemArray = try decoder.decode([ToDoItem].self, from: data)
+        } catch {
+            print("Error decoding array, \(error)")
+        }
+    }
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField: UITextField = UITextField()
         
@@ -75,9 +96,8 @@ class ToDoListViewController: UITableViewController {
                 let newItem = ToDoItem(textField.text!)
                 
                 self.itemArray.append(newItem)
-                // self.defaults.set(self.itemArray as Any, forKey: "ToDoListArray2")
                 
-                self.tableView.reloadData()
+                self.saveItems()
             }
         }
         
