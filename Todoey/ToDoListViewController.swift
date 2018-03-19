@@ -10,10 +10,17 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
 
-    let itemArray = ["Find Mike", "Buy Eggos", "Destroy Demagorgon"]
+    var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demagorgon"]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let storedArray = defaults.array(forKey: "ToDoListArray") as? [String] {
+            print(storedArray)
+            itemArray = storedArray
+        }
+        //
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -50,14 +57,29 @@ class ToDoListViewController: UITableViewController {
     
     // MARK - Add new Items
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        var textField: UITextField = UITextField()
+        
         let alert = UIAlertController(title: "Add new Todoey Item", message: "", preferredStyle: .alert)
         
+        alert.addTextField { (newTextField) in
+            newTextField.placeholder = "Create new item"
+            textField = newTextField
+        }
+
         let action = UIAlertAction(title: "Add Item", style: .default) {
             (action) in
-            print("Success")
+            
+            if (textField.text != nil) {
+                self.itemArray.append(textField.text!)
+                self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+                
+                self.tableView.reloadData()
+            }
         }
         
         alert.addAction(action)
+        
+        
         present(alert, animated: true, completion: nil)
     }
 }
