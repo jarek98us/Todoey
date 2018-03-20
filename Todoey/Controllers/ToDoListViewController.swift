@@ -101,20 +101,6 @@ class ToDoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
 
-//    func loadItems(with substring: String = "") {
-//        if (substring == "") {
-//            itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
-//        } else {
-//            itemArray = [ToDoItem]()
-//            for item in selectedCategory!.categoryItems?.allObjects as! [ToDoItem] {
-//                if (item.title?.contains(substring))! {
-//                    itemArray.append(item)
-//                }
-//            }
-//        }
-//        self.tableView.reloadData()
-//    }
-
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField: UITextField = UITextField()
         
