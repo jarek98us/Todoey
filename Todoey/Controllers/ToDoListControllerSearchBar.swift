@@ -17,10 +17,6 @@ extension ToDoListViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         let searchText = searchBar.text!
         if searchText != "" {
-//            let request : NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
-//            request.predicate = NSPredicate(format: "title CONTAINS[cs] %@", searchText)
-//            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//            loadItems(with: request)
             loadItems(with: searchText)
         } else {
             loadItems()

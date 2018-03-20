@@ -79,31 +79,41 @@ class ToDoListViewController: UITableViewController {
         }
     }
     
-//    func loadItems(with request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()) {
-//        itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
-//
-////        do {
-////            itemArray = try persistentContext.fetch(request)
-////        } catch {
-////            print("Error: \(error)")
-////        }
-////
-//        self.tableView.reloadData()
-//    }
-
     func loadItems(with substring: String = "") {
-        if (substring == "") {
-            itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
+        let request : NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+        let categoryPredicate = NSPredicate(format: "itemCategory.name MATCHES %@", selectedCategory!.name!)
+        
+        if (substring.count > 0) {
+            let substringPredicate = NSPredicate(format: "title CONTAINS[cs] %@", substring)
+            let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, substringPredicate])
+            request.predicate = compoundPredicate
+            request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         } else {
-            itemArray = [ToDoItem]()
-            for item in selectedCategory!.categoryItems?.allObjects as! [ToDoItem] {
-                if (item.title?.contains(substring))! {
-                    itemArray.append(item)
-                }
-            }
+            request.predicate = categoryPredicate
         }
+        
+        do {
+            itemArray = try persistentContext.fetch(request)
+        } catch {
+            print("Error: \(error)")
+        }
+
         self.tableView.reloadData()
     }
+
+//    func loadItems(with substring: String = "") {
+//        if (substring == "") {
+//            itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
+//        } else {
+//            itemArray = [ToDoItem]()
+//            for item in selectedCategory!.categoryItems?.allObjects as! [ToDoItem] {
+//                if (item.title?.contains(substring))! {
+//                    itemArray.append(item)
+//                }
+//            }
+//        }
+//        self.tableView.reloadData()
+//    }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField: UITextField = UITextField()
