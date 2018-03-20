@@ -12,7 +12,13 @@ import CoreData
 class ToDoListViewController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
+    var selectedCategory : Category? {
+        didSet {
+            loadItems()
+        }
+    }
     var itemArray = [ToDoItem]()
+    
     // let defaults = UserDefaults.standard
     // let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -21,7 +27,6 @@ class ToDoListViewController: UITableViewController {
         super.viewDidLoad()
         
         registerAsSearchBarDelegate()
-        loadItems()
     }
 
     override func didReceiveMemoryWarning() {
@@ -74,28 +79,32 @@ class ToDoListViewController: UITableViewController {
         }
     }
     
-//    fileprivate func loadItems() {
-//        do {
-//            persistentContext.
-//            let data = try Data(contentsOf: self.dataFilePath!)
-//            let decoder = PropertyListDecoder()
+//    func loadItems(with request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()) {
+//        itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
 //
-//            itemArray = try decoder.decode([ToDoItem].self, from: data)
-//        } catch {
-//            print("Error decoding array, \(error)")
-//        }
+////        do {
+////            itemArray = try persistentContext.fetch(request)
+////        } catch {
+////            print("Error: \(error)")
+////        }
+////
+//        self.tableView.reloadData()
 //    }
-    
-    func loadItems(with request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()) {
-        do {
-            itemArray = try persistentContext.fetch(request)
-        } catch {
-            print("Error: \(error)")
+
+    func loadItems(with substring: String = "") {
+        if (substring == "") {
+            itemArray = selectedCategory!.categoryItems?.allObjects as! [ToDoItem]
+        } else {
+            itemArray = [ToDoItem]()
+            for item in selectedCategory!.categoryItems?.allObjects as! [ToDoItem] {
+                if (item.title?.contains(substring))! {
+                    itemArray.append(item)
+                }
+            }
         }
-        
         self.tableView.reloadData()
     }
-    
+
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         var textField: UITextField = UITextField()
         
@@ -114,6 +123,7 @@ class ToDoListViewController: UITableViewController {
                 let newItem = ToDoItem(context: self.persistentContext)
                 newItem.title = textField.text!
                 newItem.done = false
+                newItem.itemCategory = self.selectedCategory!
                 
                 self.itemArray.append(newItem)
                 

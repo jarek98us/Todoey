@@ -14,6 +14,7 @@
 		EF01499C20600EFE006994B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF01499A20600EFE006994B1 /* LaunchScreen.storyboard */; };
 		EF48946420610CAA00483469 /* ToDoDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EF48946220610CAA00483469 /* ToDoDataModel.xcdatamodeld */; };
 		EF4894872061412500483469 /* ToDoListControllerSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4894862061412500483469 /* ToDoListControllerSearchBar.swift */; };
+		EF48948920614B7100483469 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF48948820614B7100483469 /* CategoryViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		EF01499D20600EFE006994B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EF48946320610CAA00483469 /* ToDoDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ToDoDataModel.xcdatamodel; sourceTree = "<group>"; };
 		EF4894862061412500483469 /* ToDoListControllerSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListControllerSearchBar.swift; sourceTree = "<group>"; };
+		EF48948820614B7100483469 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				EF01499320600EFE006994B1 /* ToDoListViewController.swift */,
 				EF4894862061412500483469 /* ToDoListControllerSearchBar.swift */,
+				EF48948820614B7100483469 /* CategoryViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF48948920614B7100483469 /* CategoryViewController.swift in Sources */,
 				EF01499420600EFE006994B1 /* ToDoListViewController.swift in Sources */,
 				EF01499220600EFE006994B1 /* AppDelegate.swift in Sources */,
 				EF48946420610CAA00483469 /* ToDoDataModel.xcdatamodeld in Sources */,
