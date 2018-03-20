@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoListViewController: UITableViewController {
 
     var itemArray = [ToDoItem]()
-    let defaults = UserDefaults.standard
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    // let defaults = UserDefaults.standard
+    // let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,25 +59,35 @@ class ToDoListViewController: UITableViewController {
     
     // MARK - Add new Items
     fileprivate func saveItems() {
-        let encoder = PropertyListEncoder()
-        do {
-            let data = try encoder.encode(self.itemArray)
-            try data.write(to: self.dataFilePath!)
-        } catch {
-            print("Error encoding array, \(error)")
+        if persistentContext.hasChanges {
+            do {
+                try persistentContext.save()
+            } catch {
+                print("Error saving context: \(error)")
+            }
         }
         
         self.tableView.reloadData()
     }
     
-    fileprivate func loadItems() {
+//    fileprivate func loadItems() {
+//        do {
+//            persistentContext.
+//            let data = try Data(contentsOf: self.dataFilePath!)
+//            let decoder = PropertyListDecoder()
+//
+//            itemArray = try decoder.decode([ToDoItem].self, from: data)
+//        } catch {
+//            print("Error decoding array, \(error)")
+//        }
+//    }
+    
+    func loadItems() {
+        let request : NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
         do {
-            let data = try Data(contentsOf: self.dataFilePath!)
-            let decoder = PropertyListDecoder()
-            
-            itemArray = try decoder.decode([ToDoItem].self, from: data)
+            itemArray = try persistentContext.fetch(request)
         } catch {
-            print("Error decoding array, \(error)")
+            print("Error: \(error)")
         }
     }
     
@@ -93,7 +105,10 @@ class ToDoListViewController: UITableViewController {
             (action) in
             
             if (textField.text != nil) {
-                let newItem = ToDoItem(textField.text!)
+                
+                let newItem = ToDoItem(context: self.persistentContext)
+                newItem.title = textField.text!
+                newItem.done = false
                 
                 self.itemArray.append(newItem)
                 
