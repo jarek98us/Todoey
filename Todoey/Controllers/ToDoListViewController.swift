@@ -10,7 +10,8 @@ import UIKit
 import CoreData
 
 class ToDoListViewController: UITableViewController {
-
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     var itemArray = [ToDoItem]()
     // let defaults = UserDefaults.standard
     // let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
@@ -19,6 +20,7 @@ class ToDoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        registerAsSearchBarDelegate()
         loadItems()
     }
 
@@ -51,14 +53,14 @@ class ToDoListViewController: UITableViewController {
         item.done = !item.done
         tableView.cellForRow(at: indexPath)?.accessoryType = item.done ? .checkmark : .none
         
-        tableView.deselectRow(at: indexPath, animated: true)
-        
         saveItems()
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     
     // MARK - Add new Items
-    fileprivate func saveItems() {
+    fileprivate func saveItems(refreshItems: Bool = false) {
         if persistentContext.hasChanges {
             do {
                 try persistentContext.save()
@@ -67,7 +69,9 @@ class ToDoListViewController: UITableViewController {
             }
         }
         
-        self.tableView.reloadData()
+        if (refreshItems) {
+            self.tableView.reloadData()
+        }
     }
     
 //    fileprivate func loadItems() {
@@ -82,13 +86,14 @@ class ToDoListViewController: UITableViewController {
 //        }
 //    }
     
-    func loadItems() {
-        let request : NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()
+    func loadItems(with request: NSFetchRequest<ToDoItem> = ToDoItem.fetchRequest()) {
         do {
             itemArray = try persistentContext.fetch(request)
         } catch {
             print("Error: \(error)")
         }
+        
+        self.tableView.reloadData()
     }
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -112,7 +117,7 @@ class ToDoListViewController: UITableViewController {
                 
                 self.itemArray.append(newItem)
                 
-                self.saveItems()
+                self.saveItems(refreshItems: true)
             }
         }
         
