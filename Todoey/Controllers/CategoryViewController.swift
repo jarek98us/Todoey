@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryViewController: UITableViewController {
 
-    var categoryArray = [Category]()
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
+    var categories: Results<Category>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,37 +27,31 @@ class CategoryViewController: UITableViewController {
     
     // MARK: Table View Datasource Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArray.count
+        return categories?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         
-        cell.textLabel?.text = categoryArray[indexPath.row].name
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "No categories added yet!"
         cell.accessoryType = .detailButton
         
         return cell
     }
     
     // MARK: Data Manipulation Methods
-    func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categoryArray = try persistentContext.fetch(request)
-        } catch {
-            print("Error: \(error)")
-        }
-        
-        self.tableView.reloadData()
+    func loadCategories() {
+        categories = realm.objects(Category.self)
     }
     
-    fileprivate func saveCategories(refreshItems: Bool = false) {
-        if persistentContext.hasChanges {
-            do {
-                try persistentContext.save()
-            } catch {
-                print("Error saving context: \(error)")
+    fileprivate func save(category: Category, refreshItems: Bool = false) {
+        do {
+            try realm.write {
+                realm.add(category)
             }
+        } catch {
+            print("Error saving context: \(error)")
         }
         
         if (refreshItems) {
@@ -82,12 +76,10 @@ class CategoryViewController: UITableViewController {
             
             if (textField.text != nil) {
                 
-                let newCategory = Category(context: self.persistentContext)
+                let newCategory = Category()
                 newCategory.name = textField.text!
-
-                self.categoryArray.append(newCategory)
                 
-                self.saveCategories(refreshItems: true)
+                self.save(category: newCategory, refreshItems: true)
             }
         }
         
@@ -99,7 +91,7 @@ class CategoryViewController: UITableViewController {
     
     // MARK: Table View Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row: \(indexPath.row), item: \(categoryArray[indexPath.row])")
+        print("Selected row: \(indexPath.row), item: \(categories![indexPath.row])")
 
         performSegue(withIdentifier: "goToItems", sender: self)
     }
@@ -107,7 +99,7 @@ class CategoryViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = (segue.destination as! ToDoListViewController)
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categoryArray[indexPath.row]
+            destinationVC.selectedCategory = categories?[indexPath.row] ?? nil
         }
     }
 }

@@ -10,7 +10,7 @@
         <relationship name="itemCategory" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="categoryItems" inverseEntity="Category" syncable="YES"/>
     </entity>
     <elements>
-        <element name="ToDoItem" positionX="-0" positionY="135" width="128" height="88"/>
         <element name="Category" positionX="-254" positionY="135" width="128" height="73"/>
+        <element name="ToDoItem" positionX="-0" positionY="135" width="128" height="88"/>
     </elements>
 </model>
