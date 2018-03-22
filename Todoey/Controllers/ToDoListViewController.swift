@@ -27,6 +27,30 @@ class ToDoListViewController: SwipeTableViewController {
         
         registerAsSearchBarDelegate()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation controller does not exist.")
+        }
+        
+        if let backgroundColor = UIColor(hexString: selectedCategory!.colorHex) {
+            let foregroundColor = ContrastColorOf(backgroundColor, returnFlat: true)
+            navBar.barTintColor = backgroundColor
+            title = selectedCategory!.name
+            searchBar.barTintColor = backgroundColor
+        
+            navBar.tintColor = foregroundColor
+            navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: foregroundColor]
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if let navBar = navigationController?.navigationBar {
+            navBar.barTintColor = UIColor(hexString: "007AFF")
+            navBar.tintColor = FlatWhite()
+            navBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: FlatWhite()]
+        }
+    }
  
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -50,7 +74,10 @@ class ToDoListViewController: SwipeTableViewController {
             if let color = UIColor(hexString: selectedCategory!.colorHex) {
                 cell.backgroundColor = color
                     .darken(byPercentage: CGFloat(indexPath.row) / CGFloat(items!.count))
-                cell.textLabel!.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+                
+                let foregroundColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)
+                cell.textLabel!.textColor = foregroundColor
+                cell.tintColor = foregroundColor
             }
         }
         

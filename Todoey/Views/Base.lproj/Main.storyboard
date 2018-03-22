@@ -39,14 +39,13 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Items" id="fsL-bH-0Fs">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="we4-63-z7u">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="ppq-WR-tMr" id="plt-Vk-WKp"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchBar" destination="r53-Gt-Si5" id="Rce-WQ-d4X"/>
+                        <outlet property="searchBar" destination="r53-Gt-Si5" id="Q7M-Si-0JE"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ua-dY-PrV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -58,14 +57,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="A3y-Dn-XDv" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gFz-EE-eTd">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="gFz-EE-eTd">
+                        <rect key="frame" x="0.0" y="20" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="barTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </textAttributes>
@@ -79,7 +75,7 @@
             </objects>
             <point key="canvasLocation" x="595.20000000000005" y="132.23388305847078"/>
         </scene>
-        <!--Categories-->
+        <!--Todoey-->
         <scene sceneID="A1G-eS-sjf">
             <objects>
                 <tableViewController id="qhD-ce-jAb" customClass="CategoryViewController" customModule="Todoey" sceneMemberID="viewController">
@@ -102,7 +98,7 @@
                             <outlet property="delegate" destination="qhD-ce-jAb" id="CeN-55-V8l"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Categories" id="4Fk-2h-cbq">
+                    <navigationItem key="navigationItem" title="Todoey" id="4Fk-2h-cbq">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="KnY-x3-Km7">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
