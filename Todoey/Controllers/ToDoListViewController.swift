@@ -55,23 +55,25 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row: \(indexPath.row), item: \(String(describing: items?[indexPath.row]))")
         
-        let item = items?[indexPath.row]
-        if (item != nil) {
+        if let item = items?[indexPath.row] {
             do {
                 try realm.write {
-                    item!.done = !item!.done
+                    //realm.delete(item)
+                    item.done = !item.done
                 }
             } catch {
                 print("Error: \(error)")
             }
-            // save(item: item!)
+            //tableView.reloadData()
+            tableView.cellForRow(at: indexPath)?.accessoryType = item.done ? .checkmark : .none
         }
-        tableView.cellForRow(at: indexPath)?.accessoryType = item!.done ? .checkmark : .none
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func loadItems(with substring: String = "") {
-        items = selectedCategory!.items.sorted(byKeyPath: "title", ascending: true)
+        items = selectedCategory!.items.sorted(byKeyPath: "createdAt", ascending: true)
+        tableView.reloadData()
     }
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {

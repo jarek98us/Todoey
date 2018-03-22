@@ -15,11 +15,11 @@ extension ToDoListViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let searchText = searchBar.text!
-        if searchText != "" {
-            loadItems(with: searchText)
-        } else {
-            loadItems()
+        if let searchText = searchBar.text {
+            items = items?.filter("title CONTAINS[cd] %@", searchText)
+                .sorted(byKeyPath: "createdAt", ascending: true)
+            
+            tableView.reloadData()
         }
     }
     
