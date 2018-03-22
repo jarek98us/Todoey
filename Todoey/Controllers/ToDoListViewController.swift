@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoListViewController: UITableViewController {
+class ToDoListViewController: SwipeTableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     var selectedCategory : Category? {
@@ -40,12 +40,13 @@ class ToDoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.getCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
         let item = items?[indexPath.row]
         if item != nil {
             cell.textLabel?.text = item!.title
             cell.accessoryType = item!.done ? .checkmark : .none
+            cell.backgroundColor = UIColor(hexString: item!.colorHex)
         }
         
         return cell
@@ -94,6 +95,7 @@ class ToDoListViewController: UITableViewController {
                     try self.realm.write {
                         let newItem = ToDoItem()
                         newItem.title = textField.text!
+                        newItem.colorHex = UIColor.randomFlat.hexValue()
                         category.items.append(newItem)
                     }
                 }  catch {
@@ -107,6 +109,19 @@ class ToDoListViewController: UITableViewController {
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    override func deleteRow(rowIndex: Int) {
+        if let item = self.items?[rowIndex] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(item)
+                }
+            } catch {
+                print("Error when deleting item: \(error)")
+            }
+            
+        }
     }
 }
 
